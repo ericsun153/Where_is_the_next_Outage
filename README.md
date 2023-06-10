@@ -1,2 +1,11 @@
-# Where_is_the_next_Outage...
-Data-based Prediction on US Power Outage
+By Eric Sun (z9sun@ucsd.edu) & Sunan Xu (sux002@ucsd.edu)
+
+---
+
+# Framing the Problem
+
+# Baseline Model
+
+# Final Model
+
+# Fairness Analysis
