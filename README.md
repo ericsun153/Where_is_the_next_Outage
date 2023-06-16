@@ -2,7 +2,7 @@ By Eric Sun (z9sun@ucsd.edu) & Sunan Xu (sux002@ucsd.edu)
 
 ---
 
-# Framing the Problem   
+# Framing the Problem
 Power outages can have significant impacts on society, causing disruptions in daily life, affecting businesses, and posing potential risks to public safety. Understanding the patterns and characteristics of power outages can help utilities and policymakers develop strategies to improve the resilience and reliability of the electrical grid.
 
 The climate region in which a power outage occurs can provide valuable insights into the causes and consequences of outages. Climate regions are defined based on the prevailing weather conditions and climatic factors of a specific geographic area. The West Climate region, for example, may be characterized by dry and hot conditions, while other regions may experience colder temperatures or more severe weather events.
@@ -46,10 +46,10 @@ The choice of predicting whether a power outage is in the West Climate region or
 ## Features
 To train the model, we will use columns that contain characteristics different among each outage, excluding the timestamp and columns directly equal to the postal code column (e.g., U.S._state). These columns will provide relevant information for predicting the power outage's location. At the time of prediction, we would have access to the features mentioned above for the power outage in question. We would not have any future information beyond what is available in the dataset.
 
-## Metric for Evaluation:
+## Metric for Evaluation
 To evaluate the model's performance, we can use metrics such as accuracy or F1-score. However, given that the dataset is likely to have imbalanced classes (as the number of outages in the West Climate region may differ from those outside the region), it would be advisable to use metrics that are more robust to class imbalance, such as F1-score.
 
-## Justification for Metric Choice:
+## Justification for Metric Choice
 The choice of using F1-score over accuracy is due to the potential class imbalance in the dataset. Accuracy alone may provide misleading results when the classes are imbalanced, as a high accuracy score could be achieved by simply predicting the majority class. F1-score, which considers both precision and recall, provides a more balanced evaluation of the model's performance when dealing with imbalanced datasets.
 
 ---
