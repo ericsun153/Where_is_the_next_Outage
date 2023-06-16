@@ -73,7 +73,7 @@ The model achieved a training accuracy of 94.04% and a testing accuracy of 90.29
 
 Based on the accuracy and other performance metrics, the current model can be considered good. It achieves a relatively high accuracy on both the training and testing sets, indicating that it can effectively classify whether a power outage occurs in the West Climate region or not. However, it is important to note that the precision and recall scores are relatively lower, which suggests that the model may have some difficulty in correctly identifying positive instances (outages in the West Climate region). Further evaluation and refinement may be necessary to improve these scores and ensure a more balanced performance across all classes.
 
-![](assets/confusionmatrix.png)
+![](asset/confusionmatrix.jpg)
 
 The confusion matrix shows that there are 363 true positives (TP), 20 false negatives (FN), 37 true negatives (TN), and 23 false positives (FP). These values provide a detailed breakdown of the model's predictions, allowing for a deeper analysis of its performance.
 
