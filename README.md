@@ -56,6 +56,48 @@ The choice of using F1-score over accuracy is due to the potential class imbalan
 
 # Baseline Model
 
+
+
+## Model Description
+The model used in this prediction task is a logistic regression model with one-hot encoding for categorical features. The selected features for the model are 'NERC.REGION', 'CAUSE.CATEGORY', and 'OUTAGE.DURATION(mins)'.
+
+## Features
+'NERC.REGION': This is a nominal feature representing the NERC (North American Electric Reliability Corporation) region where the power outage occurred. It is a categorical variable.
+'CAUSE.CATEGORY': This is a nominal feature describing the category of the cause of the power outage. It is a categorical variable.
+'OUTAGE.DURATION(mins)': This is a quantitative feature representing the duration of the power outage in minutes. It is a numerical variable.
+Encoding:
+The model uses one-hot encoding to convert the categorical features ('NERC.REGION' and 'CAUSE.CATEGORY') into numerical representation. This encoding technique creates binary columns for each unique category, indicating the presence or absence of that category in the data. The 'remainder' parameter in the ColumnTransformer is set to 'passthrough', which means the numerical feature ('OUTAGE.DURATION(mins)') is passed through without any encoding.
+
+## Model Performance
+The model achieved a training accuracy of 94.04% and a testing accuracy of 90.29%. The precision and recall scores for the model are 0.617 and 0.649, respectively.
+
+Based on the accuracy and other performance metrics, the current model can be considered good. It achieves a relatively high accuracy on both the training and testing sets, indicating that it can effectively classify whether a power outage occurs in the West Climate region or not. However, it is important to note that the precision and recall scores are relatively lower, which suggests that the model may have some difficulty in correctly identifying positive instances (outages in the West Climate region). Further evaluation and refinement may be necessary to improve these scores and ensure a more balanced performance across all classes.
+
+![](assets/confusionmatrix.png)
+
+The confusion matrix shows that there are 363 true positives (TP), 20 false negatives (FN), 37 true negatives (TN), and 23 false positives (FP). These values provide a detailed breakdown of the model's predictions, allowing for a deeper analysis of its performance.
+
+## Summary
+Upon analyzing the performance of the current model, there are a few observations to consider. The model achieves high accuracy, indicating that it is able to make correct predictions for the majority of instances. However, the precision and recall scores are relatively lower compared to the accuracy.
+
+Precision represents the proportion of correctly predicted positive instances out of the total instances predicted as positive. In this context, it measures the ability of the model to correctly identify power outages occurring in the West Climate region. The precision score of 0.617 suggests that the model has some difficulty in precisely identifying these instances. There is a possibility of false positives, where the model incorrectly classifies a power outage as occurring in the West Climate region.
+
+Recall, also known as sensitivity or true positive rate, represents the proportion of correctly predicted positive instances out of the actual positive instances. It measures the ability of the model to capture all the power outages occurring in the West Climate region. The recall score of 0.649 indicates that the model captures a substantial portion of these instances but still misses some, resulting in false negatives.
+
+Considering the imbalanced nature of the classes (West Climate region vs. other regions), where the West Climate region may be a minority class, the lower precision and recall scores can be partly attributed to the class imbalance. It is important to note that optimizing for both precision and recall can be a trade-off, and the choice depends on the specific requirements of the problem. In some cases, precision might be more critical, while in others, recall might be the primary concern.
+
+To further improve the model's performance, additional steps can be taken, such as:
+
+- Feature engineering: Explore and include additional relevant features that might have a strong correlation with the West Climate region. These features could provide more discriminatory power and improve the model's predictive ability.
+
+- Hyperparameter tuning: Experiment with different hyperparameter settings for the logistic regression model or try alternative classification algorithms to find a configuration that better balances precision and recall.
+
+- Handling class imbalance: Implement techniques to address the class imbalance issue, such as oversampling the minority class (West Climate region) or using weighted loss functions to give more importance to the minority class during training.
+
+Upon all these analysis, we will continue and use these strategies to train our final model using random forest classifier, which will be better and easier at hyperparam tuning process.
+
+---
+
 # Final Model
 
 # Fairness Analysis
