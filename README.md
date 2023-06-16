@@ -47,16 +47,14 @@ The choice of predicting whether a power outage is in the West Climate region or
 To train the model, we will use columns that contain characteristics different among each outage, excluding the timestamp and columns directly equal to the postal code column (e.g., U.S._state). These columns will provide relevant information for predicting the power outage's location. At the time of prediction, we would have access to the features mentioned above for the power outage in question. We would not have any future information beyond what is available in the dataset.
 
 ## Metric for Evaluation
-To evaluate the model's performance, we can use metrics such as accuracy or F1-score. However, given that the dataset is likely to have imbalanced classes (as the number of outages in the West Climate region may differ from those outside the region), it would be advisable to use metrics that are more robust to class imbalance, such as F1-score.
+To evaluate the model's performance, we can use metrics such as accuracy or R square. However, given that the dataset is likely to have imbalanced classes (as the number of outages in the West Climate region may differ from those outside the region), it would be advisable to use metrics that are more robust to class imbalance, such as R square.
 
 ## Justification for Metric Choice
-The choice of using F1-score over accuracy is due to the potential class imbalance in the dataset. Accuracy alone may provide misleading results when the classes are imbalanced, as a high accuracy score could be achieved by simply predicting the majority class. F1-score, which considers both precision and recall, provides a more balanced evaluation of the model's performance when dealing with imbalanced datasets.
+The choice of using R square over accuracy is due to the potential class imbalance in the dataset. Accuracy alone may provide misleading results when the classes are imbalanced, as a high accuracy score could be achieved by simply predicting the majority class. R square, which considers both precision and recall, provides a more balanced evaluation of the model's performance when dealing with imbalanced datasets.
 
 ---
 
 # Baseline Model
-
-
 
 ## Model Description
 The model used in this prediction task is a logistic regression model with one-hot encoding for categorical features. The selected features for the model are 'NERC.REGION', 'CAUSE.CATEGORY', and 'OUTAGE.DURATION(mins)'.
@@ -65,7 +63,8 @@ The model used in this prediction task is a logistic regression model with one-h
 'NERC.REGION': This is a nominal feature representing the NERC (North American Electric Reliability Corporation) region where the power outage occurred. It is a categorical variable.
 'CAUSE.CATEGORY': This is a nominal feature describing the category of the cause of the power outage. It is a categorical variable.
 'OUTAGE.DURATION(mins)': This is a quantitative feature representing the duration of the power outage in minutes. It is a numerical variable.
-Encoding:
+
+## Encoding
 The model uses one-hot encoding to convert the categorical features ('NERC.REGION' and 'CAUSE.CATEGORY') into numerical representation. This encoding technique creates binary columns for each unique category, indicating the presence or absence of that category in the data. The 'remainder' parameter in the ColumnTransformer is set to 'passthrough', which means the numerical feature ('OUTAGE.DURATION(mins)') is passed through without any encoding.
 
 ## Model Performance
@@ -100,4 +99,40 @@ Upon all these analysis, we will continue and use these strategies to train our 
 
 # Final Model
 
+## Model Choosing and features:
+After conducting several trials, we have decided to use the random forest classifier as our model for two main reasons. Firstly, although logistic regression performs well as a baseline model, it has a limited number of tunable hyperparameters compared to other models. This makes it challenging for us to fine-tune the final model effectively. Secondly, our dataset contains numerous categorical features, suggesting that a classifier may be a better choice. Here are the features we have chosen for our model:
+
+- `CLIMATE.CATEGORY`: This feature is transformed using one-hot encoding. It provides valuable information about a region's climate, as different climate categories can have distinct patterns or effects on the predicted climate region.
+
+- `CAUSE.CATEGORY.DETAIL`: Transformed using one-hot encoding, this feature captures specific details about the cause category, which could influence the climate region.
+
+- `CAUSE.CATEGORY`: Also transformed using one-hot encoding, this feature represents the cause category of the outage and offers insights into the climate region.
+
+- `PC.REALGSP`: Scaled using StandardScaler, this feature represents the real gross state product and is standardized to have a mean of 0 and unit variance. It may be relevant for predicting the climate region.
+
+- `OUTAGE.DURATION(mins)`: Scaled using StandardScaler, this feature represents the duration of the outage in minutes. Scaling helps handle features with different scales and magnitudes. The duration of the outage may be related to the climate region, as regions with severe weather conditions may experience longer power outages.
+
+- `PI.UTIL.OFUSA(%)`: Scaled using StandardScaler, this feature represents the utility of power infrastructure in the USA. Scaling is applied for consistency and to prevent dominance by features with larger values. The distribution of power infrastructure across different areas can provide information about the climate.
+
+## Model Performance
+Even before tuning any hyperparameters, our final model already outperformed the previous version. The test accuracy is approximately 93%. We utilized GridSearch to find the best hyperparameter values, including the number of estimators, maximum features, and minimum sample splits. This tuning resulted in a better-performing model, although the improvement was not significant. Ultimately, our accuracy reached around 93.5%. The recall is approximately 0.95, and the precision is around 0.67, showing significant improvement compared to our baseline model.
+
+## Summary
+The random forest classifier yielded promising results for our prediction task. It enhanced the overall accuracy and recall of our model. Moreover, this process highlighted the distinct advantages of each model. Logistic regression performed well even with a limited number of features, but the random forest classifier demonstrated superior performance when additional features were incorporated, along with optimized hyperparameters. Model selection is a crucial step in this process, and fine-tuning hyperparameters can further enhance model performance.
+
+---
+
 # Fairness Analysis
+
+## Accuracy Analysis
+For our fairness assessment, we have categorized the test dataset into two groups: power outages affecting more than 50,000 people and those affecting fewer than 50,000 individuals. An outage affecting more than 50,000 people is considered a severe outage. Our primary evaluation metric is accuracy. We propose a null hypothesis asserting that our model's accuracy for determining outage severity is roughly equivalent across all cases, with any observed differences attributable to random variability. Conversely, our alternative hypothesis suggests that the model demonstrates unfairness, with a higher accuracy for less severe power outages than for severe ones. We have selected the accuracy disparity between less severe and severe outages as our test statistic, with a significance level of 0.01. After running a permutation test 5,000 times, we obtained a p-value of 0.1286, which exceeds our significance level. This outcome leads us to retain the null hypothesis, indicating that our model, based on this accuracy metric, is fair. However, we cannot definitively assert its complete fairness as the permutation test results are also contingent on random chance. Hence, we recommend further testing with more data to verify if it is 'truly fair'.
+
+<iframe src="asset/fairness2.html" width=800 height=600 frameBorder=0></iframe>
+
+
+## R squared Analysis
+Our secondary evaluation metric is the R-squared value. We present a similar null hypothesis suggesting that our model's R-squared value for determining outage severity is approximately equal in all scenarios, and any discrepancies are due to random chance. Alternatively, our model could be unfair if the R-squared value is higher for less severe outages compared to severe ones. We've chosen the R-squared difference between less severe and severe outages as our test statistic, with a significance level of 0.01. Upon executing a permutation test 5,000 times, we obtained a p-value of 0.0112. As this value is above our significance level, we cannot reject the null hypothesis, suggesting that our model is fair based on the R-squared analysis. However, it is worth noting that this p-value is very close to our set significance level. Given that permutation test results can vary with each iteration, we cannot confidently assert that our model is fair based on the R-squared fairness analysis alone.
+
+<iframe src="asset/fiarness1.html" width=800 height=600 frameBorder=0></iframe>
+
+---
